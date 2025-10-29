@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  api:
+    build: .
+    container_name: medical_api
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/medical-internships
+      - JWT_SECRET=supersecretkey
+      - JWT_EXPIRES_IN=7d
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
